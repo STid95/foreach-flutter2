@@ -1,7 +1,10 @@
-class GameType {
-  String name;
-  String description;
-  bool isFamilyFriendly;
+enum GameType {
+  RPG("Jeu de rôle", true),
+  FPS("First Person Shooter", false),
+  Simulation("Simulation", true);
 
-  GameType(this.name, this.description, this.isFamilyFriendly);
+  const GameType(this.name, this.isFamilyFriendly);
+  final String name;
+
+  final bool isFamilyFriendly;
 }

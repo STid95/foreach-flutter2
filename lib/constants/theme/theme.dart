@@ -13,7 +13,6 @@ final ThemeData myTheme = ThemeData(
   dividerColor: Color(0x1f000000),
   highlightColor: Color(0x66bcbcbc),
   splashColor: Color(0x66c8c8c8),
-  selectedRowColor: Color(0xfff5f5f5),
   unselectedWidgetColor: Color(0x8a000000),
   disabledColor: Color(0x61000000),
   secondaryHeaderColor: Color(0xffeaf9fb),
@@ -54,61 +53,61 @@ final ThemeData myTheme = ThemeData(
     ),
   ),
   textTheme: TextTheme(
-    headline1: TextStyle(
+    displayLarge: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline2: TextStyle(
+    displayMedium: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline3: TextStyle(
+    displaySmall: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline4: TextStyle(
+    headlineMedium: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subtitle1: TextStyle(
+    titleMedium: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    bodyText2: TextStyle(
+    bodyMedium: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    bodyText1: TextStyle(
+    bodyLarge: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    caption: TextStyle(
+    bodySmall: TextStyle(
       color: Color(0x8a000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    button: TextStyle(
+    labelLarge: TextStyle(
       color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    overline: TextStyle(
+    labelSmall: TextStyle(
       color: Color(0xff000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
@@ -116,49 +115,49 @@ final ThemeData myTheme = ThemeData(
     ),
   ),
   primaryTextTheme: TextTheme(
-    headline1: TextStyle(
+    displayLarge: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline2: TextStyle(
+    displayMedium: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline3: TextStyle(
+    displaySmall: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    headline4: TextStyle(
+    headlineMedium: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    caption: TextStyle(
+    bodySmall: TextStyle(
       color: Color(0xb3ffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    button: TextStyle(
+    labelLarge: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    subtitle1: TextStyle(
+    titleMedium: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
-    overline: TextStyle(
+    labelSmall: TextStyle(
       color: Color(0xffffffff),
       fontSize: null,
       fontWeight: FontWeight.w400,

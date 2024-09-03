@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled2/constants/theme/theme.dart';
+import 'package:untitled2/views/add_page/add_page.dart';
 import 'package:untitled2/views/home_page/home_page.dart';
 
 void main() {
@@ -14,7 +15,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: myTheme,
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MyHomePage(
+              title: 'Home',
+            ),
+        '/add': (context) => const AddPage(
+              title: 'Add game',
+            ),
+      },
     );
   }
 }

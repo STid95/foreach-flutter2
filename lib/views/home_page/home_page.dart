@@ -20,10 +20,18 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               const VGGrid(),
+              IconButton(
+                  color: Theme.of(context).primaryColor,
+                  onPressed: () => Navigator.of(context).pushNamed('/add'),
+                  icon: const Icon(
+                    Icons.add,
+                    size: 40,
+                  )),
               const VGList(),
-              Container(
+              /*Container(
                 //Box qui contient un enfant et permet par exemple de définir des bordures
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
@@ -36,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //Capte un geste user (ex clic) et fait une action
                 child: const Icon(Icons.add),
                 onTap: () => print('coucou'),
-              )
+              )*/
             ],
           ),
         ),
