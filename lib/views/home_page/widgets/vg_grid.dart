@@ -2,90 +2,91 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled2/constants/mocking/games.dart';
 import 'package:untitled2/constants/utils/say_hello.dart';
+import 'package:untitled2/models/game_type.dart';
+import 'package:untitled2/models/video_game.dart';
+import 'package:untitled2/views/home_page/widgets/filter_wrap.dart';
 
-class VGGrid extends StatelessWidget {
+import 'game_card.dart';
+
+class VGGrid extends StatefulWidget {
   const VGGrid({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
-      childAspectRatio: 0.8,
-      shrinkWrap: true,
-      crossAxisCount: MediaQuery.of(context).size.width < 600 ? 2 : 4,
-      children: games
-          .map(
-            (game) => GestureDetector(
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text(
-                    game.name,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  content: const ClipOval(
-                    child: Image(
-                      image: AssetImage('assets/ff7.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  actions: const [
-                    VGButton(title: 'Annuler'),
-                    VGButton(title: 'Confirmer'),
-                  ],
-                ),
-              ),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: Card(
-                  shape: Border.all(color: Theme.of(context).primaryColorDark),
-                  child: Column(
-                    children: [
-                      Text(
-                        game.name,
-                        style: const TextStyle(fontSize: 18.0, color: Colors.blue),
-                      ),
-                      Wrap(
-                        children: [
-                          for (var i = 0; i < game.grade; i++) const Icon(Icons.star),
-                        ],
-                      ),
-                      Text(game.types.map((e) => e.name).join(', ')),
-                      const SizedBox(
-                        width: 150,
-                        height: 150,
-                        child: ClipOval(
-                          child: Image(
-                            image: AssetImage('assets/ff7.jpg'),
-                            fit: BoxFit.fitHeight,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
-          .toList(),
-    );
-  }
+  State<VGGrid> createState() => _VGGridState();
 }
 
-class VGButton extends StatelessWidget {
-  final String title;
-  const VGButton({
-    required this.title,
-    super.key,
-  });
+class _VGGridState extends State<VGGrid> {
+  List<VideoGame> filteredGames = [];
+  bool choiceChipSelected = false;
+
+  void filterList(bool isSelected, GameType type) {
+    if (!isSelected && filteredGames.any((game) => game.types.contains(type))) {
+      filteredGames.removeWhere((game) => game.types.contains(type));
+    } else if (isSelected) {
+      filteredGames.addAll(games.where((game) => game.types.contains(type)).toList());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(backgroundColor: Theme.of(context).secondaryHeaderColor),
-      onPressed: sayHello,
-      child: Text(title),
+    return Column(
+      children: [
+        Wrap(
+          children: [
+            ChoiceChip(
+                selectedColor: Colors.red,
+                disabledColor: Colors.blue,
+                showCheckmark: false,
+                label: Icon(Icons.ac_unit_outlined),
+                selected: choiceChipSelected,
+                onSelected: (selected) => setState(() {
+                      choiceChipSelected = selected;
+                    })),
+            Chip(
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(
+                  color: Colors.black,
+                ),
+                borderRadius: BorderRadius.circular(
+                  10,
+                ),
+              ),
+              label: Text('Simple Chip'),
+              backgroundColor: Colors.white,
+            ),
+            ActionChip(
+                label: Text('Retirer mes filtres'),
+                onPressed: () => setState(() {
+                      choiceChipSelected = false;
+                    }))
+          ],
+        ),
+        FilterWrap(
+          onChipSelected: (isSelected, type) => setState(
+            () {
+              filterList(isSelected, type);
+            },
+          ),
+        ),
+        GridView.count(
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          childAspectRatio: 0.8,
+          shrinkWrap: true,
+          crossAxisCount: MediaQuery.of(context).size.width < 600 ? 2 : 4,
+          children: filteredGames.isNotEmpty
+              ? filteredGames
+                  .map(
+                    (game) => GameCard(game: game),
+                  )
+                  .toList()
+              : games
+                  .map(
+                    (game) => GameCard(game: game),
+                  )
+                  .toList(),
+        ),
+      ],
     );
   }
 }
