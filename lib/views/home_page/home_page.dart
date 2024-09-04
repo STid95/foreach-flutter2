@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled2/constants/widgets/vg_add_template.dart';
 import 'package:untitled2/constants/widgets/vg_scaffold.dart';
 import 'package:untitled2/views/home_page/widgets/vg_grid.dart';
 import 'package:untitled2/views/home_page/widgets/vg_list.dart';
@@ -25,7 +26,26 @@ class _MyHomePageState extends State<MyHomePage> {
               const VGGrid(),
               IconButton(
                   color: Theme.of(context).primaryColor,
-                  onPressed: () => Navigator.of(context).pushNamed('/add'),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => Dialog(
+                              child: SizedBox(
+                                  height: MediaQuery.of(context).size.height / 2.5,
+                                  child: Padding(
+                                      padding: EdgeInsets.all(20.0),
+                                      child: AddGame(
+                                        onVideoGameCreated: (VideoGame) {
+                                          Navigator.of(context).pop();
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Le jeu ${VideoGame.name} a bien été créé !'),
+                                            ),
+                                          );
+                                        },
+                                      ))),
+                            ));
+                  },
                   icon: const Icon(
                     Icons.add,
                     size: 40,
