@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:untitled2/constants/utils/say_hello.dart';
 import 'package:untitled2/logics/videogame_list_provider.dart';
 
 class VGScaffold extends ConsumerWidget {

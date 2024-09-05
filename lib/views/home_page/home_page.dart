@@ -23,6 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              TextButton(child: Text('Go to add page'), onPressed: () => Navigator.of(context).pushNamed('/add')),
               const VGGrid(),
               IconButton(
                   color: Theme.of(context).primaryColor,
@@ -35,15 +36,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: Padding(
                                       padding: EdgeInsets.all(20.0),
                                       child: AddGame(
-                                        onVideoGameCreated: (VideoGame) {
+                                          /*(VideoGame) {
                                           Navigator.of(context).pop();
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
                                               content: Text('Le jeu ${VideoGame.name} a bien été créé !'),
                                             ),
                                           );
-                                        },
-                                      ))),
+                                        },*/
+                                          ))),
                             ));
                   },
                   icon: const Icon(

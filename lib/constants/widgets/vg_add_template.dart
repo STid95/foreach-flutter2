@@ -1,28 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:untitled2/models/game_type.dart';
 import 'package:untitled2/models/video_game.dart';
 
-class AddGame extends StatefulWidget {
-  final Function(VideoGame)? onVideoGameCreated;
-  const AddGame({super.key, this.onVideoGameCreated});
-
-  @override
-  State<AddGame> createState() => _AddGameState();
-}
-
-class _AddGameState extends State<AddGame> {
+class AddGame extends HookConsumerWidget {
+  //final Function(VideoGame)? onVideoGameCreated;
+  //AddGame(this.onVideoGameCreated, {super.key});
   final gameNameController = TextEditingController();
-  GameType dropdownValue = GameType.RPG;
-  bool isPerfect = false;
   final _formKey = GlobalKey<FormState>();
 
-  VideoGame createNewVideoGame() {
-    return VideoGame(name: gameNameController.value.text, grade: isPerfect ? 5.0 : 3.0, types: [dropdownValue]);
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isPerfect = useState(false);
+
+    final dropdownValue = useState(GameType.RPG);
+
+    VideoGame createNewVideoGame() {
+      return VideoGame(
+          name: gameNameController.value.text, grade: isPerfect.value ? 5.0 : 3.0, types: [dropdownValue.value]);
+    }
+
     return Column(children: [
       Form(
         key: _formKey,
@@ -70,15 +69,10 @@ class _AddGameState extends State<AddGame> {
           Flexible(
             fit: FlexFit.loose,
             flex: 6,
-            child: DropdownButton(
-              value: dropdownValue,
-              items: GameType.values.map((e) => DropdownMenuItem(value: e, child: Text(e.name))).toList(),
-              onChanged: (value) {
-                setState(() {
-                  dropdownValue = value ?? GameType.RPG;
-                });
-              },
-            ),
+            child: DropdownButton<GameType>(
+                value: dropdownValue.value,
+                items: GameType.values.map((e) => DropdownMenuItem(value: e, child: Text(e.name))).toList(),
+                onChanged: (value) => dropdownValue.value = value ?? dropdownValue.value),
           ),
         ],
       ),
@@ -88,25 +82,23 @@ class _AddGameState extends State<AddGame> {
           const Flexible(flex: 2, fit: FlexFit.tight, child: Text('Parfait ?')),
           const Spacer(),
           Flexible(
-            fit: FlexFit.loose,
-            flex: 6,
-            child: Switch(
-                trackOutlineColor: WidgetStateProperty.resolveWith(
-                  (final Set<WidgetState> states) {
-                    if (states.contains(WidgetState.selected)) {
-                      return null;
-                    }
-                    return Colors.black;
-                  },
-                ),
-                inactiveTrackColor: Colors.white,
-                inactiveThumbColor: Theme.of(context).primaryColor,
-                activeColor: Colors.white,
-                value: isPerfect,
-                onChanged: (value) => setState(() {
-                      isPerfect = value;
-                    })),
-          ),
+              fit: FlexFit.loose,
+              flex: 6,
+              child: Switch(
+                  trackOutlineColor: WidgetStateProperty.resolveWith(
+                    (final Set<WidgetState> states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return null;
+                      }
+                      return Colors.black;
+                    },
+                  ),
+                  inactiveTrackColor: Colors.white,
+                  inactiveThumbColor: Theme.of(context).primaryColor,
+                  activeColor: Colors.white,
+                  value: isPerfect.value,
+                  onChanged: (value) => isPerfect.value = value)),
+
           /* ]),
                 Checkbox(
                     value: isFamilyFriendly,
@@ -125,7 +117,7 @@ class _AddGameState extends State<AddGame> {
       TextButton(
         onPressed: () {
           if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-            widget.onVideoGameCreated!(createNewVideoGame());
+            //widget.onVideoGameCreated!(createNewVideoGame());
           }
         },
         child: Text('Ajouter'),

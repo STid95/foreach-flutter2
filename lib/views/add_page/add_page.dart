@@ -17,9 +17,9 @@ class _AddPageState extends State<AddPage> {
   Widget build(BuildContext context) {
     return VGScaffold(
         title: widget.title,
-        body: const SingleChildScrollView(
+        body: SingleChildScrollView(
             child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: AddGame(),
         )));
   }
