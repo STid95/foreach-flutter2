@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:untitled2/constants/theme/theme.dart';
 import 'package:untitled2/views/add_page/add_page.dart';
 import 'package:untitled2/views/home_page/home_page.dart';
@@ -12,18 +13,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: myTheme,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const MyHomePage(
-              title: 'Home',
-            ),
-        '/add': (context) => const AddPage(
-              title: 'Add game',
-            ),
-      },
+    return ProviderScope(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: myTheme,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const MyHomePage(
+                title: 'Home',
+              ),
+          '/add': (context) => const AddPage(
+                title: 'Add game',
+              ),
+        },
+      ),
     );
   }
 }

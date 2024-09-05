@@ -1,34 +1,34 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:untitled2/constants/mocking/games.dart';
-import 'package:untitled2/constants/utils/say_hello.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:untitled2/logics/videogame_list_provider.dart';
 import 'package:untitled2/models/game_type.dart';
 import 'package:untitled2/models/video_game.dart';
 import 'package:untitled2/views/home_page/widgets/filter_wrap.dart';
 
 import 'game_card.dart';
 
-class VGGrid extends StatefulWidget {
+class VGGrid extends ConsumerStatefulWidget {
   const VGGrid({super.key});
 
   @override
-  State<VGGrid> createState() => _VGGridState();
+  ConsumerState<VGGrid> createState() => _VGGridState();
 }
 
-class _VGGridState extends State<VGGrid> {
-  List<VideoGame> filteredGames = [];
+class _VGGridState extends ConsumerState<VGGrid> {
   bool choiceChipSelected = false;
 
-  void filterList(bool isSelected, GameType type) {
-    if (!isSelected && filteredGames.any((game) => game.types.contains(type))) {
-      filteredGames.removeWhere((game) => game.types.contains(type));
-    } else if (isSelected) {
-      filteredGames.addAll(games.where((game) => game.types.contains(type)).toList());
-    }
+  @override
+  void initState() {
+    super.initState();
+    ref.read(videoGameListProvider.notifier).initialize(); //A l'init state, j'initialise ma liste mockée
   }
 
   @override
   Widget build(BuildContext context) {
+    final games = ref.watch(
+        videoGameListProvider); //J'écoute mon provider, à chaque changement de state ma variable games va changer aussi
+    final filteredGames = ref.watch(filteredVideoGameListProvider);
+
     return Column(
       children: [
         Wrap(
@@ -61,13 +61,22 @@ class _VGGridState extends State<VGGrid> {
                     }))
           ],
         ),
-        FilterWrap(
-          onChipSelected: (isSelected, type) => setState(
-            () {
-              filterList(isSelected, type);
-            },
-          ),
+        TextButton(
+          child: Text('Add Videogame'),
+          onPressed: () {
+            ref.read(videoGameListProvider.notifier).add(
+                  //Cela va ainsi faire automatiquement rebuild mon grid
+                  VideoGame(
+                    name: "WoW",
+                    grade: 5.0,
+                    types: [GameType.RPG],
+                  ),
+                );
+          },
         ),
+        FilterWrap(
+            onChipSelected: (isSelected, type) =>
+                ref.read(filteredVideoGameListProvider.notifier).filterList(isSelected, type)),
         GridView.count(
           physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.symmetric(vertical: 5.0),
