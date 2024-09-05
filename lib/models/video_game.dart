@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'game_type.dart';
 
 class VideoGame {
@@ -14,5 +16,13 @@ class VideoGame {
         print("It's Family Friendly");
       }
     }
+  }
+
+  factory VideoGame.fromQueryDocumentSnapshot(QueryDocumentSnapshot snapshot) {
+    return VideoGame(
+      name: snapshot['name'],
+      grade: snapshot['grade'],
+      description: snapshot['description'],
+    );
   }
 }
