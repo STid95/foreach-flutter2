@@ -19,11 +19,12 @@ class _FilterWrapState extends State<FilterWrap> {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-        spacing: 10.0,
-        children: GameType.values.map(
-          (type) {
-            return GameTypeChip(label: type.name, onSelected: (isSelected) => widget.onChipSelected(isSelected, type));
-          },
-        ).toList());
+      spacing: 10.0,
+      children: GameType.values.map(
+        (type) {
+          return GameTypeChip(label: type.name, onSelected: (isSelected) => widget.onChipSelected(isSelected, type));
+        },
+      ).toList(),
+    );
   }
 }
