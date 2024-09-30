@@ -34,15 +34,15 @@ class VGDialog extends StatelessWidget {
           child: Padding(
               padding: EdgeInsets.all(20.0),
               child: AddGame(
-                  /*(VideoGame) {
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Le jeu ${VideoGame.name} a bien été créé !'),
-                            ),
-                          );
-                        },*/
-                  ))),
+                (VideoGame) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Le jeu ${VideoGame.name} a bien été créé !'),
+                    ),
+                  );
+                },
+              ))),
     );
   }
 }

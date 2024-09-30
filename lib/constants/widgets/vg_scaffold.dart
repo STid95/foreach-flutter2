@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:untitled2/logics/firebase_provider.dart';
 import 'package:untitled2/logics/videogame_list_provider.dart';
 
 class VGScaffold extends ConsumerWidget {
@@ -15,9 +17,35 @@ class VGScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Future<void> logIn() async {
+      try {
+        ref.watch(firebaseAuthProvider.notifier).logIn('ncontant@yahoo.fr', 'Test1234!');
+      } on FirebaseAuthException catch (e) {
+        ref.watch(firebaseAuthProvider.notifier).signIn('ncontant@yahoo.fr', 'Test1234!');
+        print(e);
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    Future<void> signOut() async {
+      try {
+        ref.watch(firebaseAuthProvider.notifier).logout();
+      } on FirebaseAuthException catch (e) {
+        print(e);
+      } catch (e) {
+        print(e);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.account_circle),
+        leading: IconButton(
+          onPressed: () => ref.watch(firebaseUser) != null ? signOut() : logIn(),
+          icon: Icon(
+            ref.watch(firebaseUser) != null ? Icons.logout : Icons.login,
+          ),
+        ),
         actions: [
           ActionButton(
             icon: Icons.games,

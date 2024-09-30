@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:untitled2/logics/firestore_provider.dart';
 import 'package:untitled2/models/game_type.dart';
 import 'package:untitled2/models/video_game.dart';
 
 class AddGame extends HookConsumerWidget {
-  //final Function(VideoGame)? onVideoGameCreated;
-  //AddGame(this.onVideoGameCreated, {super.key});
+  final Function(VideoGame)? onVideoGameCreated;
+  AddGame(this.onVideoGameCreated, {super.key});
   final gameNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -39,12 +40,7 @@ class AddGame extends HookConsumerWidget {
                   icon: const Icon(Icons.games_rounded),
                   labelText: 'Nom du jeu',
                   errorStyle: TextStyle(color: Colors.red)),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              onChanged: (value) {
-                if (_formKey.currentState!.validate()) {
-                  //Navigator.of(context).pop();
-                }
-              },
+              onChanged: (value) {},
               controller: gameNameController,
               validator: (value) {
                 if (value == null || value.length < 2) {
@@ -116,9 +112,10 @@ class AddGame extends HookConsumerWidget {
       ),
       TextButton(
         onPressed: () {
-          if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-            //widget.onVideoGameCreated!(createNewVideoGame());
-          }
+          ref.watch(fireStoreProvider.notifier).addInFirestore(
+              VideoGame(grade: 4, name: "Baldur's Gate 3", description: "Un super RPG", types: [GameType.RPG]));
+
+          //widget.onVideoGameCreated!(createNewVideoGame());
         },
         child: Text('Ajouter'),
       )
