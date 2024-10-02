@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:untitled2/logics/firestore_provider.dart';
+import 'package:untitled2/models/vg_user.dart';
 
 final firebaseUser = StateProvider<User?>((ref) => null);
 
@@ -33,39 +35,46 @@ class FirebaseAuthProvider extends StateNotifier<FirebaseAuth?> {
     }
   }
 
-  Future<void> logIn(String email, String password) async {
+  Future<String?> logIn(String email, String password) async {
     if (state != null) {
       print('log in');
       try {
         final credential = await state!.signInWithEmailAndPassword(email: email, password: password);
       } on FirebaseAuthException catch (e) {
-        print(e);
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
-        }
-      }
-    }
-  }
-
-  Future<void> signIn(String email, String password) async {
-    {
-      try {
-        await ref.watch(firebaseAuthProvider)?.createUserWithEmailAndPassword(
-              email: email,
-              password: password,
-            );
-      } on FirebaseAuthException catch (e) {
-        print(e);
-        if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
-        }
+        return (e.message);
       } catch (e) {
         print(e);
       }
+      return null;
+    }
+    return null;
+  }
+
+  Future<String?> createUserInFirebase(String email, String password, String favoriteGame) async {
+    await signIn(email, password).then((value) {
+      if (value != null && value.user != null) {
+        print('inscription ok');
+        final user = VGUser(id: value.user!.uid, email: email, favoriteGame: favoriteGame);
+        ref.read(fireStoreProvider.notifier).createNewUser(user);
+      } else
+        return 'Inscription ratée';
+    }, onError: (error) => 'Inscription ratée');
+    return null;
+  }
+
+  Future<UserCredential?> signIn(String email, String password) async {
+    {
+      try {
+        return await state!.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+      } on FirebaseAuthException catch (e) {
+        print(e.message);
+      } catch (e) {
+        print(e);
+      }
+      return null;
     }
   }
 }

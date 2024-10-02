@@ -8,8 +8,16 @@ class VideoGame {
   String? description;
   num grade;
   List<GameType> types;
+  String? imageUrl;
 
-  VideoGame({this.id, required this.name, this.description, required this.grade, this.types = const []});
+  VideoGame({
+    this.id,
+    required this.name,
+    this.description,
+    required this.grade,
+    this.types = const [],
+    this.imageUrl,
+  });
 
   void listTypes() {
     for (GameType type in types) {
@@ -33,7 +41,8 @@ class VideoGame {
       'description': this.description ?? '',
       'grade': this.grade,
       'name': this.name,
-      'types': this.types.map((type) => type.name).toList() ?? []
+      'types': this.types.map((type) => type.name).toList() ?? [],
+      'image_url': this.imageUrl,
     };
   }
 }

@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:untitled2/logics/firestore_provider.dart';
 import 'package:untitled2/models/game_type.dart';
 import 'package:untitled2/models/video_game.dart';
@@ -18,9 +22,14 @@ class AddGame extends HookConsumerWidget {
 
     final dropdownValue = useState(GameType.RPG);
 
+    final imageUrl = useState<String?>(null);
+
     VideoGame createNewVideoGame() {
       return VideoGame(
-          name: gameNameController.value.text, grade: isPerfect.value ? 5.0 : 3.0, types: [dropdownValue.value]);
+          name: gameNameController.value.text,
+          grade: isPerfect.value ? 5.0 : 3.0,
+          types: [dropdownValue.value],
+          imageUrl: imageUrl.value);
     }
 
     return Column(children: [
@@ -110,12 +119,53 @@ class AddGame extends HookConsumerWidget {
                 ),*/
         ],
       ),
+      IconButton(
+        icon: Icon(Icons.add_a_photo),
+        onPressed: () async {
+          final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+          print(image?.name);
+          if (image != null) {
+            File file = File(image.path);
+
+            // Create the file metadata
+            final metadata = SettableMetadata(contentType: image.mimeType);
+
+// Create a reference to the Firebase Storage bucket
+            final storageRef = FirebaseStorage.instance.ref();
+
+// Upload file and metadata to the path 'images/mountains.jpg'
+            final uploadTask = storageRef.child("images/${image.name}").putFile(file, metadata);
+
+// Listen for state changes, errors, and completion of the upload.
+            uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) async {
+              switch (taskSnapshot.state) {
+                case TaskState.running:
+                  final progress = 100.0 * (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
+                  print("Upload is $progress% complete.");
+                  break;
+                case TaskState.paused:
+                  print("Upload is paused.");
+                  break;
+                case TaskState.canceled:
+                  print("Upload was canceled");
+                  break;
+                case TaskState.error:
+                  // Handle unsuccessful uploads
+                  break;
+                case TaskState.success:
+                  imageUrl.value = await storageRef.child("images/${image.name}").getDownloadURL();
+                  break;
+              }
+            });
+          }
+        },
+      ),
+      if (imageUrl.value != null) SizedBox(height: 100, width: 100, child: Image.network(imageUrl.value!)),
       TextButton(
         onPressed: () {
-          ref.watch(fireStoreProvider.notifier).addInFirestore(
-              VideoGame(grade: 4, name: "Baldur's Gate 3", description: "Un super RPG", types: [GameType.RPG]));
+          ref.watch(fireStoreProvider.notifier).addInFirestore(createNewVideoGame());
 
-          //widget.onVideoGameCreated!(createNewVideoGame());
+          onVideoGameCreated!(createNewVideoGame());
         },
         child: Text('Ajouter'),
       )

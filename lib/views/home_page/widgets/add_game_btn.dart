@@ -12,7 +12,7 @@ class AddGameBtn extends StatelessWidget {
     return IconButton(
         color: Theme.of(context).primaryColor,
         onPressed: () {
-          showDialog(context: context, builder: (context) => VGDialog());
+          showDialog(context: context, builder: (context) => const VGDialogGame());
         },
         icon: const Icon(
           Icons.add,
@@ -21,8 +21,8 @@ class AddGameBtn extends StatelessWidget {
   }
 }
 
-class VGDialog extends StatelessWidget {
-  const VGDialog({
+class VGDialogGame extends StatelessWidget {
+  const VGDialogGame({
     super.key,
   });
 
@@ -30,15 +30,15 @@ class VGDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: SizedBox(
-          height: MediaQuery.of(context).size.height / 2.5,
+          height: 400,
           child: Padding(
               padding: EdgeInsets.all(20.0),
               child: AddGame(
-                (VideoGame) {
+                (videogame) {
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Le jeu ${VideoGame.name} a bien été créé !'),
+                      content: Text('Le jeu ${videogame.name} a bien été créé !'),
                     ),
                   );
                 },
